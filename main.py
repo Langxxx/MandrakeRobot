@@ -3,6 +3,7 @@ from bearychat import RTMClient
 
 from rtm_loop import RTMLoop
 
+from build_carthage import move_to_production
 
 def main():
     # init the rtm client
