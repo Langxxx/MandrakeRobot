@@ -1,13 +1,14 @@
 import time
+from configparser import ConfigParser
 from bearychat import RTMClient
-
 from rtm_loop import RTMLoop
 
-from build_carthage import move_to_production
+cfg = ConfigParser()
+cfg.read('config.ini')
 
 def main():
     # init the rtm client
-    client = RTMClient("a499bab800daeccfe4099bf0b58f9cf1", "https://rtm.bearychat.com")
+    client = RTMClient(cfg.get('main', 'rtm_token'), "https://rtm.bearychat.com")
 
     resp = client.start()  # get rtm user and ws_host
     user = resp["user"]
