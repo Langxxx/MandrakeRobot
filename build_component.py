@@ -1,5 +1,5 @@
 import argparse
-from build_all_frameworks import move_to_production
+from build_all_cartahge import move_to_production
 import subprocess
 
 from main import cfg
