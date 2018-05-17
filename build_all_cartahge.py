@@ -3,18 +3,15 @@ import subprocess
 import shutil
 import re
 import requests
-from configparser import ConfigParser
 
-
-cfg = ConfigParser()
-cfg.read('config.ini')
+from main import cfg
 
 productor_path = cfg.get('build', 'production_path')
 build_path = cfg.get('build', 'build_path')
 
 def download_cartfile():
     file_name = 'Cartfile'
-    result = requests.get(cfg.get('build', 'carthfile_url'))
+    result = requests.get("""https://raw.githubusercontent.com/bearyinnovative/Mandrake/component/Components/CarthageStore/Cartfile?token=AOcLsCSifLEzfuyY7r_JXqmplY6NCrcSks5bBookwA%3D%3D""")
     if result.status_code != 200:
         print('can not get cartfile')
         return
