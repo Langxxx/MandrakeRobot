@@ -1,10 +1,24 @@
 import time
+import re
 from configparser import ConfigParser
 from bearychat import RTMClient
 from rtm_loop import RTMLoop
 
 cfg = ConfigParser()
 cfg.read('config.ini')
+
+
+def parse_message(message):
+    """parse message
+
+    :message: rmt message
+    :returns: TODO
+
+    """
+    text = message['text']
+    cmd = re.sub('@<=(=[A-Za-z0-9]+)=>', '', text)
+    print(cmd)
+
 
 def main():
     # init the rtm client
@@ -35,10 +49,10 @@ def main():
         except Exception:
             continue
 
-        if message.is_from(user):
-            continue
+        if message.is_mention_user(user):
+            parse_message(message)
         try:
-            loop.send(message.refer("Pardon?"))
+            continue
         except Exception:
             continue
 
