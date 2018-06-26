@@ -1,14 +1,12 @@
 import time
 import re
-from configparser import ConfigParser
 from bearychat import RTMClient
 from rtm_loop import RTMLoop
+from bin import beta
+from common import cfg
 
-cfg = ConfigParser()
-cfg.read('config.ini')
 
-
-def parse_message(message):
+def handle_message(message):
     """parse message
 
     :message: rmt message
@@ -16,8 +14,9 @@ def parse_message(message):
 
     """
     text = message['text']
-    cmd = re.sub('@<=(=[A-Za-z0-9]+)=>', '', text)
-    print(cmd)
+    cmd = re.sub('@<=(=[A-Za-z0-9]+)=>', '', text).strip()
+    if cmd == 'beta':
+        return beta.run
 
 
 def main():
@@ -32,6 +31,18 @@ def main():
     loop.start()
     time.sleep(2)
 
+    def reply_message(message):
+        r = ''
+        while True:
+            text = yield r
+            if not text:
+                return
+            reply = message.refer(text)
+            try:
+                loop.send(reply)
+            except Exception:
+                continue
+
     while True:
         error = loop.get_error()
 
@@ -41,8 +52,6 @@ def main():
 
         message = loop.get_message(True, 5)
 
-        if not message or not message.is_chat_message():
-            continue
         try:
             print("rtm loop received {0} from {1}".format(message["text"],
                                                           message["uid"]))
@@ -50,11 +59,8 @@ def main():
             continue
 
         if message.is_mention_user(user):
-            parse_message(message)
-        try:
-            continue
-        except Exception:
-            continue
+            action = handle_message(message)
+            action(reply_message(message))
 
 
 if __name__ == '__main__':
