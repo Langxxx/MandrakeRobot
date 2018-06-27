@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from common import cfg
+from common import cfg, upload_to_qiuniu
 import subprocess
 import os
+import time
 
 
 def execu_cmd(cmd, log_as_file=False):
@@ -14,7 +15,12 @@ def execu_cmd(cmd, log_as_file=False):
         with open('log', 'r') as f:
             text = f.read()
             if text.find('fastlane finished with errors'):
-                return 'fastlane finished with errors'
+                current_time = time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime())
+                url = upload_to_qiuniu('./log', current_time + '.log')
+                if url:
+                    return 'fastlane finished with errors\n log url: ' + url
+                else:
+                    return 'fastlane finished with error and log upload failure'
             else:
                 return 'fastlane finished suceessful'
     else:
@@ -42,17 +48,17 @@ def run(consumer):
     consumer.send(None)
 
     try:
-        # rebase_dev_cmd = "git reset --hard && git checkout dev && git pull --rebase origin dev"
-        # consumer.send(rebase_dev_cmd)
-        # consumer.send(execu_cmd(rebase_dev_cmd))
+        rebase_dev_cmd = "git reset --hard && git checkout dev && git pull --rebase origin dev"
+        consumer.send(rebase_dev_cmd)
+        consumer.send(execu_cmd(rebase_dev_cmd))
 
-        # update_local_pods = "make update-local-pods"
-        # consumer.send(update_local_pods)
-        # consumer.send(execu_cmd(update_local_pods))
+        update_local_pods = "make update-local-pods"
+        consumer.send(update_local_pods)
+        consumer.send(execu_cmd(update_local_pods))
 
-        # pod_install = "pod install"
-        # consumer.send(pod_install)
-        # consumer.send(execu_cmd(pod_install))
+        pod_install = "pod install"
+        consumer.send(pod_install)
+        consumer.send(execu_cmd(pod_install))
 
         beta_cmd = "UNLOCK_PWD={pwd} && fastlane beta".format(pwd=cfg.get('main', 'unlock_pwd'))
         consumer.send('fastlane beta')
