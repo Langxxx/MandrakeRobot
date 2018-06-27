@@ -4,6 +4,7 @@ from qiniu import Auth, put_file, etag
 
 cfg = ConfigParser()
 cfg.read('.config.ini')
+mdk_path = cfg.get('Mandrake', 'path')
 
 
 def upload_to_qiuniu(file, name):

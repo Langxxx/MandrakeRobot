@@ -2,7 +2,7 @@ import time
 import re
 from bearychat import RTMClient
 from rtm_loop import RTMLoop
-from bin import beta, bump_version
+from bin import beta, bump_version, ls
 from common import cfg
 
 
@@ -19,6 +19,8 @@ def handle_message(message):
         return beta.run
     elif cmd == 'bump_version':
         return bump_version.run
+    elif cmd == 'ls':
+        return ls.run
 
 
 def main():
