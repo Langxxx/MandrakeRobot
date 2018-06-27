@@ -2,7 +2,7 @@ import time
 import re
 from bearychat import RTMClient
 from rtm_loop import RTMLoop
-from bin import beta
+from bin import beta, bump_version
 from common import cfg
 
 
@@ -17,6 +17,8 @@ def handle_message(message):
     cmd = re.sub('@<=(=[A-Za-z0-9]+)=>', '', text).strip()
     if cmd == 'beta':
         return beta.run
+    elif cmd == 'bump_version':
+        return bump_version.run
 
 
 def main():
