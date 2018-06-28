@@ -1,5 +1,7 @@
 from configparser import ConfigParser
 from qiniu import Auth, put_file, etag
+from functools import wraps
+from types import GeneratorType
 
 
 cfg = ConfigParser()
@@ -21,6 +23,29 @@ def upload_to_qiuniu(file, name):
         return qiniu_url + '/' + name
     else:
         return None
+
+
+class ParameterError(Exception):
+    def __str__(self):
+        return "miss generator"
+
+
+def production(f):
+    @wraps(f)
+    def decorated_function(*arg, **kwargs):
+        consumer = None
+        for s in arg:
+            if isinstance(s, GeneratorType):
+                consumer = s
+                break
+        if consumer:
+            consumer.send(None)
+            f(*arg, **kwargs)
+            consumer.close()
+        else:
+            raise ParameterError()
+
+    return decorated_function
 
 
 if __name__ == '__main__':

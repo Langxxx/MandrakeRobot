@@ -35,7 +35,7 @@ def main():
     loop.start()
     time.sleep(2)
 
-    def reply_message(message):
+    def message_consumer(message):
         r = ''
         while True:
             text = yield r
@@ -63,8 +63,8 @@ def main():
             continue
 
         if message.is_mention_user(user):
-            action = handle_message(message)
-            action(reply_message(message))
+            message_produce = handle_message(message)
+            message_produce(message_consumer(message))
 
 
 if __name__ == '__main__':

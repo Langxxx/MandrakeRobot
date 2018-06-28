@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-from common import cfg, upload_to_qiuniu
+from common import cfg, upload_to_qiuniu, mdk_path, production
 import subprocess
 import os
 import time
 
 
 def execu_cmd(cmd, log_as_file=False):
-    mdk_path = cfg.get('Mandrake', 'path')
     if log_as_file:
         current_dir_path = os.getcwd()
         log_path = current_dir_path + '/log'
@@ -44,9 +43,8 @@ def execu_cmd(cmd, log_as_file=False):
             # return 'fastlane finished suceessful'
 
 
+@production
 def run(consumer):
-    consumer.send(None)
-
     try:
         rebase_dev_cmd = "git reset --hard && git checkout dev && git pull --rebase origin dev"
         consumer.send(rebase_dev_cmd)
@@ -67,4 +65,3 @@ def run(consumer):
     except subprocess.SubprocessError as error:
         consumer.send(error.__str__())
 
-    consumer.close()
