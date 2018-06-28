@@ -1,2 +1,4 @@
-websocket-client==0.47.0
+qiniu==7.2.2
 requests==2.11.0
+six==1.11.0
+websocket-client==0.47.0
