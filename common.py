@@ -35,6 +35,7 @@ def production(f):
     def decorated_function(*arg, **kwargs):
         consumer = None
         for s in arg:
+            print(arg)
             if isinstance(s, GeneratorType):
                 consumer = s
                 break

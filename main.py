@@ -2,7 +2,7 @@ import time
 import re
 from bearychat import RTMClient
 from rtm_loop import RTMLoop
-from bin import beta, bump_version, ls
+from bin import beta, bump_version, ls, shell_model
 from common import cfg
 
 
@@ -21,6 +21,10 @@ def handle_message(message):
         return bump_version.run
     elif cmd == 'ls':
         return ls.run
+    elif cmd == 'shell_model':
+        uid = message['uid']
+        shell_model.setup_shell_model(uid)
+        return shell_model.run
 
 
 def main():
@@ -65,6 +69,8 @@ def main():
         if message.is_mention_user(user):
             message_produce = handle_message(message)
             message_produce(message_consumer(message))
+        elif shell_model.in_shell_model(message['uid']):
+            shell_model.exec(message_consumer(message), message)
 
 
 if __name__ == '__main__':
