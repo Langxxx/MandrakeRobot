@@ -2,8 +2,12 @@
 ; you should make the same config for yourself
 
 [main]
-rtm_token=a499bab800daeccfe4099bf0b58f9cf1
+rtm_token=xxxx
 unlock_pwd=xxx
+access_key=xxxx
+secret_key=xxxxx
+bucket_name=mandrake-log
+qiniu_base_url=http://paz3l0thl.bkt.clouddn.com
 [build]
 production_path=/Users/bear/Production/ios
 build_path=.
@@ -27,4 +31,4 @@ path=/Users/bear/workspace/temp/Mandrake/Components/MDKDiscardableList
 path=/Users/bear/workspace/temp/Mandrake/Components/MDKMe
 
 [Mandrake]
-path=/Users/bear/workspace/Mandrake
+path=/Users/didi/Desktop/bearychat/Mandrake
