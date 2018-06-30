@@ -2,7 +2,7 @@ import time
 import re
 from bearychat import RTMClient
 from rtm_loop import RTMLoop
-from bin import beta, bump_version, ls, shell_model
+from bin import beta, bump_version, ls, shell_model, nanfang
 from common import cfg
 
 
@@ -21,6 +21,8 @@ def handle_message(message):
         return bump_version.run
     elif cmd == 'ls':
         return ls.run
+    elif cmd == 'nanfang':
+        return nanfang.run
     elif cmd == 'shell_model':
         uid = message['uid']
         shell_model.setup_shell_model(uid)
