@@ -12,15 +12,18 @@ def exec_cmd(cmd, log_as_file=False):
         subprocess.call(_cmd, shell=True, cwd=mdk_path)
         with open('log', 'r') as f:
             text = f.read()
+            current_time = time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime())
+            url = upload_to_qiuniu('./log', current_time + '.log')
             if text.find('fastlane finished with errors'):
-                current_time = time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime())
-                url = upload_to_qiuniu('./log', current_time + '.log')
                 if url:
                     return 'fastlane finished with errors\n log url: ' + url
                 else:
                     return 'fastlane finished with error and log upload failure'
             else:
-                return 'fastlane finished suceessful'
+                if url:
+                    return 'fastlane finished suceessful, log url: ' + url,
+                else:
+                    return 'fastlane finished sucessful, nig upload log failure'
     else:
         out_log = subprocess.check_output(cmd, shell=True,
                                           stderr=subprocess.STDOUT,
